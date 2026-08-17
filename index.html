@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,20 +9,30 @@
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: 'Roboto', sans-serif;
-            background-color: #f3f4f6;
-            color: #2b2b2b;
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a;
+            color: #1e293b;
         }
 
         :root {
-            --pdf-primary: #117a7e;   /* Teal / Dark Cyan */
-            --pdf-secondary: #2c3e50; 
+            --pdf-primary: #0f766e;     /* Deep Teal */
+            --pdf-dark: #0f172a;        /* Dark Slate */
+            --pdf-accent: #0284c7;      /* Sky Blue */
+            --pdf-light: #f8fafc;       /* Off white */
         }
 
-        /* Printable PDF Styling */
+        /* Metallic Golden Text Style */
+        .gold-gradient-text {
+            background: linear-gradient(135deg, #bf953f 0%, #fcf6ba 30%, #b38728 50%, #fbf5b7 75%, #aa771c 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-family: 'Cinzel', serif;
+        }
+
+        /* Printable PDF Styling & Page Break Fix */
         @media print {
             body {
                 background-color: white !important;
@@ -43,6 +52,21 @@
                 box-shadow: none !important;
                 border: none !important;
             }
+            
+            /* Prevent unwanted cuts across pages */
+            .print-break-avoid,
+            #secAbout,
+            #secPersonal,
+            #pvEduSection,
+            #secSkills,
+            #secLang,
+            #pvTrainingSection,
+            #pvRefSection,
+            .pdf-card-item {
+                break-inside: avoid !important;
+                page-break-inside: avoid !important;
+            }
+
             @page {
                 size: A4 portrait;
                 margin: 10mm 12mm;
@@ -53,31 +77,25 @@
             width: 6px;
         }
         .custom-scroll::-webkit-scrollbar-track {
-            background: #e2e8f0;
+            background: #1e293b;
         }
         .custom-scroll::-webkit-scrollbar-thumb {
-            background: #94a3b8;
+            background: #475569;
             border-radius: 4px;
         }
 
         .pdf-section-title {
             color: var(--pdf-primary);
             font-weight: 700;
-            font-size: 13px;
-            letter-spacing: 0.5px;
+            font-size: 12px;
+            letter-spacing: 0.8px;
             text-transform: uppercase;
-            border-bottom: 1.5px solid var(--pdf-primary);
-            padding-bottom: 3px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
             margin-bottom: 8px;
-        }
-
-        .pdf-sub-title {
-            color: var(--pdf-primary);
-            font-weight: 700;
-            font-size: 11px;
-            text-transform: uppercase;
-            margin-top: 6px;
-            margin-bottom: 4px;
+            padding-bottom: 4px;
+            border-bottom: 2px solid var(--pdf-primary);
         }
 
         .empty-placeholder {
@@ -86,23 +104,32 @@
         }
     </style>
 </head>
-<body class="min-h-screen flex flex-col">
+<body class="min-h-screen flex flex-col bg-slate-950">
+
+    <!-- Top Golden & Black Branding Banner (Center Aligned, Hidden on Print) -->
+    <div class="no-print bg-gradient-to-r from-black via-zinc-900 to-black border-b border-amber-500/30 py-2.5 px-4 flex justify-center items-center shadow-lg relative">
+        <div class="flex items-center justify-center gap-2 text-center">
+            <i class="fa-solid fa-crown text-amber-400 text-sm"></i>
+            <span class="gold-gradient-text font-extrabold text-base tracking-widest uppercase">DEVELOPED BY RIMIT</span>
+            <i class="fa-solid fa-gem text-amber-400 text-xs ml-1"></i>
+        </div>
+    </div>
 
     <!-- Top Navigation Bar -->
-    <header class="bg-slate-900 text-white p-3 shadow-md no-print sticky top-0 z-50">
+    <header class="bg-slate-900/90 backdrop-blur text-white p-3 shadow-md no-print sticky top-0 z-50 border-b border-slate-800">
         <div class="max-w-7xl mx-auto flex justify-between items-center px-2">
             <div class="flex items-center gap-3">
                 <i class="fa-solid fa-file-invoice text-teal-400 text-2xl"></i>
-                <h1 class="text-lg font-bold">Interactive CV Builder (Blank Template)</h1>
+                <h1 class="text-base font-bold tracking-wide">Interactive CV Builder Studio</h1>
             </div>
             <div class="flex items-center gap-2">
-                <button onclick="loadSampleData()" class="bg-slate-700 hover:bg-slate-600 text-white px-3 py-1.5 rounded text-xs font-medium transition-all">
-                    <i class="fa-solid fa-download mr-1"></i> Load Sample Data
+                <button onclick="loadSampleData()" class="bg-amber-600 hover:bg-amber-700 text-white px-3 py-1.5 rounded text-xs font-medium transition-all shadow flex items-center gap-1">
+                    <i class="fa-solid fa-download"></i> Load Sample Data
                 </button>
-                <button onclick="clearAllData()" class="bg-rose-700 hover:bg-rose-800 text-white px-3 py-1.5 rounded text-xs font-medium transition-all">
-                    <i class="fa-solid fa-trash mr-1"></i> Clear All
+                <button onclick="clearAllData()" class="bg-rose-700 hover:bg-rose-800 text-white px-3 py-1.5 rounded text-xs font-medium transition-all shadow">
+                    <i class="fa-solid fa-trash mr-1"></i> Clear Form
                 </button>
-                <button onclick="window.print()" class="bg-teal-600 hover:bg-teal-700 text-white px-4 py-1.5 rounded text-xs font-bold flex items-center gap-1.5 shadow transition-all ml-2">
+                <button onclick="window.print()" class="bg-gradient-to-r from-teal-600 to-emerald-600 hover:from-teal-700 hover:to-emerald-700 text-white px-4 py-1.5 rounded text-xs font-bold flex items-center gap-1.5 shadow-lg transition-all ml-1 border border-teal-400/30">
                     <i class="fa-solid fa-print"></i> Print / Save PDF
                 </button>
             </div>
@@ -113,164 +140,104 @@
     <main class="max-w-7xl mx-auto w-full flex-grow grid grid-cols-1 lg:grid-cols-12 gap-6 p-4 md:p-6">
 
         <!-- Left Controls / Dynamic Form Panel -->
-        <section class="lg:col-span-5 bg-white p-5 rounded-xl shadow-md border border-slate-200 no-print max-h-[88vh] overflow-y-auto custom-scroll space-y-5">
+        <section class="lg:col-span-5 bg-slate-900 p-5 rounded-xl shadow-xl border border-slate-800 no-print max-h-[88vh] overflow-y-auto custom-scroll space-y-5">
             
-            <div class="border-b pb-2 flex justify-between items-center">
-                <h2 class="text-base font-bold text-slate-800 flex items-center gap-2">
-                    <i class="fa-solid fa-pen-to-square text-teal-600"></i> Fill Information
+            <div class="border-b border-slate-800 pb-3 flex justify-between items-center">
+                <h2 class="text-base font-bold text-slate-100 flex items-center gap-2">
+                    <i class="fa-solid fa-pen-to-square text-teal-400"></i> তথ্য পূরণ করুন
                 </h2>
-                <span class="text-xs text-slate-400">Type below to see live updates</span>
+                <span class="text-xs text-slate-400">লাইভ প্রিভিউ সাথে সাথে আপডেট হবে</span>
             </div>
 
             <!-- Header Info & Photo -->
-            <div class="bg-slate-50 p-4 rounded-lg border border-slate-200 space-y-3">
-                <h3 class="font-bold text-slate-700 text-xs uppercase tracking-wider text-teal-700">Photo & Main Contact</h3>
+            <div class="bg-slate-800/60 p-4 rounded-lg border border-slate-700/60 space-y-3">
+                <h3 class="font-bold text-xs uppercase tracking-wider text-teal-400">ছবি এবং প্রধান যোগাযোগ</h3>
                 
                 <div>
-                    <label class="block text-xs font-semibold text-slate-600 mb-1">Upload Photo:</label>
-                    <input type="file" id="imageUploader" accept="image/*" onchange="uploadPhoto(event)" class="w-full text-xs text-slate-500 file:mr-2 file:py-1 file:px-3 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-teal-100 file:text-teal-800 cursor-pointer border rounded bg-white">
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">ছবি আপলোড করুন:</label>
+                    <input type="file" id="imageUploader" accept="image/*" onchange="uploadPhoto(event)" class="w-full text-xs text-slate-400 file:mr-2 file:py-1 file:px-3 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-teal-950 file:text-teal-300 border border-slate-700 rounded bg-slate-900 cursor-pointer">
                 </div>
 
                 <div>
-                    <label class="block text-xs font-medium text-slate-600">Full Name</label>
-                    <input type="text" id="inputName" placeholder="e.g. AMIT PODDER" oninput="updateCV()" class="w-full text-xs p-2 border rounded">
+                    <label class="block text-xs font-medium text-slate-300">পূর্ণ নাম</label>
+                    <input type="text" id="inputName" placeholder="আপনার নাম লিখুন (যেমন: অমিত পোদ্দার)" oninput="updateCV()" class="w-full text-xs p-2 bg-slate-900 border border-slate-700 rounded text-slate-100 focus:border-teal-500 focus:outline-none">
                 </div>
                 <div>
-                    <label class="block text-xs font-medium text-slate-600">Designation / Tagline</label>
-                    <input type="text" id="inputTitle" placeholder="e.g. ELECTRICAL ENGINEERING GRADUATE" oninput="updateCV()" class="w-full text-xs p-2 border rounded">
+                    <label class="block text-xs font-medium text-slate-300">পদবী / টাইটেল</label>
+                    <input type="text" id="inputTitle" placeholder="আপনার পদবী লিখুন (যেমন: ইলেকট্রিক্যাল ইঞ্জিনিয়ার)" oninput="updateCV()" class="w-full text-xs p-2 bg-slate-900 border border-slate-700 rounded text-slate-100 focus:border-teal-500 focus:outline-none">
                 </div>
                 <div class="grid grid-cols-3 gap-2">
                     <div>
-                        <label class="block text-xs font-medium text-slate-600">Phone</label>
-                        <input type="text" id="inputPhone" placeholder="017xxxxxxxx" oninput="updateCV()" class="w-full text-xs p-1.5 border rounded">
+                        <label class="block text-xs font-medium text-slate-300">ফোন</label>
+                        <input type="text" id="inputPhone" placeholder="ফোন নম্বর লিখুন" oninput="updateCV()" class="w-full text-xs p-1.5 bg-slate-900 border border-slate-700 rounded text-slate-100">
                     </div>
                     <div>
-                        <label class="block text-xs font-medium text-slate-600">Email</label>
-                        <input type="text" id="inputEmail" placeholder="example@mail.com" oninput="updateCV()" class="w-full text-xs p-1.5 border rounded">
+                        <label class="block text-xs font-medium text-slate-300">ইমেইল</label>
+                        <input type="text" id="inputEmail" placeholder="ইমেইল ঠিকানা লিখুন" oninput="updateCV()" class="w-full text-xs p-1.5 bg-slate-900 border border-slate-700 rounded text-slate-100">
                     </div>
                     <div>
-                        <label class="block text-xs font-medium text-slate-600">LinkedIn</label>
-                        <input type="text" id="inputLinkedin" placeholder="linkedin.com/in/username" oninput="updateCV()" class="w-full text-xs p-1.5 border rounded">
+                        <label class="block text-xs font-medium text-slate-300">লিংকডইন</label>
+                        <input type="text" id="inputLinkedin" placeholder="লিংকডইন প্রোফাইল লিঙ্ক" oninput="updateCV()" class="w-full text-xs p-1.5 bg-slate-900 border border-slate-700 rounded text-slate-100">
                     </div>
                 </div>
             </div>
 
             <!-- About Me -->
-            <div class="bg-slate-50 p-4 rounded-lg border border-slate-200 space-y-2">
-                <h3 class="font-bold text-slate-700 text-xs uppercase tracking-wider text-teal-700">About Me</h3>
-                <textarea id="inputAbout" rows="3" placeholder="Write a short summary about yourself..." oninput="updateCV()" class="w-full text-xs p-2 border rounded"></textarea>
+            <div class="bg-slate-800/60 p-4 rounded-lg border border-slate-700/60 space-y-2">
+                <h3 class="font-bold text-xs uppercase tracking-wider text-teal-400">নিজের সম্পর্কে সংক্ষেপে</h3>
+                <textarea id="inputAbout" rows="3" placeholder="নিজের সংক্ষিপ্ত পরিচিতি বা ক্যারিয়ার লক্ষ্য লিখুন..." oninput="updateCV()" class="w-full text-xs p-2 bg-slate-900 border border-slate-700 rounded text-slate-100 focus:border-teal-500 focus:outline-none"></textarea>
             </div>
 
-            <!-- Personal Details -->
-            <div class="bg-slate-50 p-4 rounded-lg border border-slate-200 space-y-3">
-                <h3 class="font-bold text-slate-700 text-xs uppercase tracking-wider text-teal-700">Personal Details</h3>
-                <div class="grid grid-cols-2 gap-2 text-xs">
-                    <div>
-                        <label class="block text-slate-600">Father's Name</label>
-                        <input type="text" id="inputFather" placeholder="Father's name" oninput="updateCV()" class="w-full p-1.5 border rounded">
-                    </div>
-                    <div>
-                        <label class="block text-slate-600">Mother's Name</label>
-                        <input type="text" id="inputMother" placeholder="Mother's name" oninput="updateCV()" class="w-full p-1.5 border rounded">
-                    </div>
-                    <div>
-                        <label class="block text-slate-600">Date of Birth</label>
-                        <input type="text" id="inputDOB" placeholder="DD Month, YYYY" oninput="updateCV()" class="w-full p-1.5 border rounded">
-                    </div>
-                    <div>
-                        <label class="block text-slate-600">Gender</label>
-                        <input type="text" id="inputGender" placeholder="Male / Female / Other" oninput="updateCV()" class="w-full p-1.5 border rounded">
-                    </div>
-                    <div>
-                        <label class="block text-slate-600">Nationality</label>
-                        <input type="text" id="inputNationality" placeholder="Bangladeshi" oninput="updateCV()" class="w-full p-1.5 border rounded">
-                    </div>
-                    <div>
-                        <label class="block text-slate-600">Religion</label>
-                        <input type="text" id="inputReligion" placeholder="Religion" oninput="updateCV()" class="w-full p-1.5 border rounded">
-                    </div>
-                    <div>
-                        <label class="block text-slate-600">Marital Status</label>
-                        <input type="text" id="inputMarital" placeholder="Single / Married" oninput="updateCV()" class="w-full p-1.5 border rounded">
-                    </div>
-                    <div>
-                        <label class="block text-slate-600">Blood Group</label>
-                        <input type="text" id="inputBlood" placeholder="e.g. O+" oninput="updateCV()" class="w-full p-1.5 border rounded">
-                    </div>
+            <!-- Dynamic Personal Details Section -->
+            <div class="bg-slate-800/60 p-4 rounded-lg border border-slate-700/60 space-y-3">
+                <div class="flex justify-between items-center border-b border-slate-700/50 pb-2">
+                    <h3 class="font-bold text-xs uppercase tracking-wider text-teal-400">ব্যক্তিগত তথ্য</h3>
+                    <button onclick="addPersonalDetail()" class="bg-teal-600 text-white text-[11px] px-2.5 py-1 rounded hover:bg-teal-700 transition"><i class="fa-solid fa-plus"></i> যোগ করুন</button>
                 </div>
-                <div>
-                    <label class="block text-xs text-slate-600">NID No.</label>
-                    <input type="text" id="inputNid" placeholder="NID Number" oninput="updateCV()" class="w-full text-xs p-1.5 border rounded">
-                </div>
-                <div>
-                    <label class="block text-xs text-slate-600">Current Address</label>
-                    <input type="text" id="inputCurrAddr" placeholder="Present location address" oninput="updateCV()" class="w-full text-xs p-1.5 border rounded">
-                </div>
-                <div>
-                    <label class="block text-xs text-slate-600">Permanent Address</label>
-                    <input type="text" id="inputPermAddr" placeholder="Permanent home address" oninput="updateCV()" class="w-full text-xs p-1.5 border rounded">
-                </div>
-            </div>
-
-            <!-- Technical Skills -->
-            <div class="bg-slate-50 p-4 rounded-lg border border-slate-200 space-y-2 text-xs">
-                <h3 class="font-bold text-slate-700 text-xs uppercase tracking-wider text-teal-700">Technical & Soft Skills</h3>
-                <div>
-                    <label class="block text-slate-600">Computer Skills</label>
-                    <input type="text" id="inputCompSkills" placeholder="e.g. MS Word, MS Excel, Data Entry" oninput="updateCV()" class="w-full p-1.5 border rounded">
-                </div>
-                <div>
-                    <label class="block text-slate-600">Engineering Software</label>
-                    <input type="text" id="inputEngSoftware" placeholder="e.g. AutoCAD, LTspice, Proteus" oninput="updateCV()" class="w-full p-1.5 border rounded">
-                </div>
-                <div>
-                    <label class="block text-slate-600">Programming</label>
-                    <input type="text" id="inputProg" placeholder="e.g. MATLAB, Python, C++" oninput="updateCV()" class="w-full p-1.5 border rounded">
-                </div>
-                <div>
-                    <label class="block text-slate-600">Soft Skills</label>
-                    <input type="text" id="inputSoftSkills" placeholder="e.g. Communication, Problem Solving" oninput="updateCV()" class="w-full p-1.5 border rounded">
-                </div>
-            </div>
-
-            <!-- Languages -->
-            <div class="bg-slate-50 p-4 rounded-lg border border-slate-200 space-y-2 text-xs">
-                <h3 class="font-bold text-slate-700 text-xs uppercase tracking-wider text-teal-700">Languages</h3>
-                <div class="grid grid-cols-2 gap-2">
-                    <div>
-                        <label class="block text-slate-600">Bangla</label>
-                        <input type="text" id="inputLangBangla" placeholder="e.g. Native" oninput="updateCV()" class="w-full p-1.5 border rounded">
-                    </div>
-                    <div>
-                        <label class="block text-slate-600">English</label>
-                        <input type="text" id="inputLangEnglish" placeholder="e.g. Fluent / Basic" oninput="updateCV()" class="w-full p-1.5 border rounded">
-                    </div>
-                </div>
+                <div id="personalList" class="space-y-2"></div>
             </div>
 
             <!-- Dynamic Education Section -->
-            <div class="bg-slate-50 p-4 rounded-lg border border-slate-200 space-y-3">
-                <div class="flex justify-between items-center">
-                    <h3 class="font-bold text-slate-700 text-xs uppercase tracking-wider text-teal-700">Education</h3>
-                    <button onclick="addEducation()" class="bg-teal-600 text-white text-[11px] px-2 py-1 rounded hover:bg-teal-700"><i class="fa-solid fa-plus"></i> Add</button>
+            <div class="bg-slate-800/60 p-4 rounded-lg border border-slate-700/60 space-y-3">
+                <div class="flex justify-between items-center border-b border-slate-700/50 pb-2">
+                    <h3 class="font-bold text-xs uppercase tracking-wider text-teal-400">শিক্ষাগত যোগ্যতা</h3>
+                    <button onclick="addEducation()" class="bg-teal-600 text-white text-[11px] px-2.5 py-1 rounded hover:bg-teal-700 transition"><i class="fa-solid fa-plus"></i> যোগ করুন</button>
                 </div>
                 <div id="eduList" class="space-y-3"></div>
             </div>
 
+            <!-- Dynamic Technical & Soft Skills Section -->
+            <div class="bg-slate-800/60 p-4 rounded-lg border border-slate-700/60 space-y-3">
+                <div class="flex justify-between items-center border-b border-slate-700/50 pb-2">
+                    <h3 class="font-bold text-xs uppercase tracking-wider text-teal-400">দক্ষতা (Skills)</h3>
+                    <button onclick="addSkill()" class="bg-teal-600 text-white text-[11px] px-2.5 py-1 rounded hover:bg-teal-700 transition"><i class="fa-solid fa-plus"></i> যোগ করুন</button>
+                </div>
+                <div id="skillList" class="space-y-2.5"></div>
+            </div>
+
+            <!-- Dynamic Languages Section -->
+            <div class="bg-slate-800/60 p-4 rounded-lg border border-slate-700/60 space-y-3">
+                <div class="flex justify-between items-center border-b border-slate-700/50 pb-2">
+                    <h3 class="font-bold text-xs uppercase tracking-wider text-teal-400">ভাষা জ্ঞান</h3>
+                    <button onclick="addLanguage()" class="bg-teal-600 text-white text-[11px] px-2.5 py-1 rounded hover:bg-teal-700 transition"><i class="fa-solid fa-plus"></i> যোগ করুন</button>
+                </div>
+                <div id="langList" class="space-y-2"></div>
+            </div>
+
             <!-- Dynamic Training Section -->
-            <div class="bg-slate-50 p-4 rounded-lg border border-slate-200 space-y-3">
-                <div class="flex justify-between items-center">
-                    <h3 class="font-bold text-slate-700 text-xs uppercase tracking-wider text-teal-700">Training & Workshops</h3>
-                    <button onclick="addTraining()" class="bg-teal-600 text-white text-[11px] px-2 py-1 rounded hover:bg-teal-700"><i class="fa-solid fa-plus"></i> Add</button>
+            <div class="bg-slate-800/60 p-4 rounded-lg border border-slate-700/60 space-y-3">
+                <div class="flex justify-between items-center border-b border-slate-700/50 pb-2">
+                    <h3 class="font-bold text-xs uppercase tracking-wider text-teal-400">প্রশিক্ষণ ও ওয়ার্কশপ</h3>
+                    <button onclick="addTraining()" class="bg-teal-600 text-white text-[11px] px-2.5 py-1 rounded hover:bg-teal-700 transition"><i class="fa-solid fa-plus"></i> যোগ করুন</button>
                 </div>
                 <div id="trainingList" class="space-y-3"></div>
             </div>
 
             <!-- Dynamic Reference Section -->
-            <div class="bg-slate-50 p-4 rounded-lg border border-slate-200 space-y-3">
-                <div class="flex justify-between items-center">
-                    <h3 class="font-bold text-slate-700 text-xs uppercase tracking-wider text-teal-700">References</h3>
-                    <button onclick="addReference()" class="bg-teal-600 text-white text-[11px] px-2 py-1 rounded hover:bg-teal-700"><i class="fa-solid fa-plus"></i> Add</button>
+            <div class="bg-slate-800/60 p-4 rounded-lg border border-slate-700/60 space-y-3">
+                <div class="flex justify-between items-center border-b border-slate-700/50 pb-2">
+                    <h3 class="font-bold text-xs uppercase tracking-wider text-teal-400">রেফারেন্স</h3>
+                    <button onclick="addReference()" class="bg-teal-600 text-white text-[11px] px-2.5 py-1 rounded hover:bg-teal-700 transition"><i class="fa-solid fa-plus"></i> যোগ করুন</button>
                 </div>
                 <div id="refList" class="space-y-3"></div>
             </div>
@@ -279,158 +246,92 @@
 
         <!-- Right Side: Printable Live Preview Template -->
         <section class="lg:col-span-7 flex justify-center items-start">
-            <div id="cvPreview" class="print-container bg-white w-full max-w-[210mm] min-h-[297mm] p-10 shadow-xl border border-slate-200 rounded-sm text-slate-800 flex flex-col justify-between">
+            <div id="cvPreview" class="print-container bg-white w-full max-w-[210mm] min-h-[297mm] p-8 shadow-2xl border border-slate-200 text-slate-800 flex flex-col justify-between">
                 
-                <div>
-                    <!-- Header with Image & Name -->
-                    <div class="flex items-center justify-between gap-6 pb-6 mb-4 border-b border-slate-300">
-                        <div class="w-28 h-32 flex-shrink-0 border border-slate-300 rounded overflow-hidden bg-slate-50 flex items-center justify-center">
+                <div class="space-y-5">
+                    
+                    <!-- Header Banner with Photo & Contact Badges -->
+                    <div class="print-break-avoid bg-slate-900 text-white p-5 rounded-lg shadow-sm border-l-4 border-teal-500 flex flex-col md:flex-row items-center justify-between gap-5">
+                        <div class="w-24 h-28 flex-shrink-0 border-2 border-teal-500/40 rounded overflow-hidden bg-slate-800 flex items-center justify-center shadow">
                             <img id="pvPhoto" src="" alt="" class="w-full h-full object-cover hidden">
-                            <i id="pvPhotoPlaceholder" class="fa-solid fa-user text-4xl text-slate-300"></i>
+                            <i id="pvPhotoPlaceholder" class="fa-solid fa-user text-3xl text-slate-500"></i>
                         </div>
 
-                        <div class="flex-grow text-left space-y-1">
-                            <h1 id="pvName" class="text-2xl font-bold tracking-tight uppercase" style="color: var(--pdf-primary)">NAME HERE</h1>
-                            <p id="pvTitle" class="text-xs font-bold tracking-wide uppercase text-slate-600">DESIGNATION / TITLE</p>
+                        <div class="flex-grow text-center md:text-left space-y-1">
+                            <h1 id="pvName" class="text-2xl font-black tracking-tight text-white uppercase">YOUR NAME</h1>
+                            <p id="pvTitle" class="text-xs font-semibold tracking-wider text-teal-400 uppercase">YOUR DESIGNATION / TITLE</p>
                             
-                            <div class="pt-2 flex flex-col gap-1 text-[11px] text-slate-700">
-                                <div class="flex items-center gap-2">
-                                    <i class="fa-solid fa-phone text-teal-700 w-4"></i>
-                                    <span id="pvPhone" class="empty-placeholder">Phone Number</span>
-                                </div>
-                                <div class="flex items-center gap-2">
-                                    <i class="fa-solid fa-envelope text-teal-700 w-4"></i>
-                                    <span id="pvEmail" class="empty-placeholder">Email Address</span>
-                                </div>
-                                <div class="flex items-center gap-2">
-                                    <i class="fa-brands fa-linkedin text-teal-700 w-4"></i>
-                                    <span id="pvLinkedin" class="empty-placeholder">LinkedIn Profile</span>
-                                </div>
+                            <div class="pt-2 flex flex-wrap justify-center md:justify-start gap-2 text-[10.5px]">
+                                <span class="bg-slate-800/80 px-2.5 py-1 rounded border border-slate-700/70 text-slate-200 flex items-center gap-1.5">
+                                    <i class="fa-solid fa-phone text-teal-400"></i>
+                                    <span id="pvPhone" class="empty-placeholder">Phone</span>
+                                </span>
+                                <span class="bg-slate-800/80 px-2.5 py-1 rounded border border-slate-700/70 text-slate-200 flex items-center gap-1.5">
+                                    <i class="fa-solid fa-envelope text-teal-400"></i>
+                                    <span id="pvEmail" class="empty-placeholder">Email</span>
+                                </span>
+                                <span class="bg-slate-800/80 px-2.5 py-1 rounded border border-slate-700/70 text-slate-200 flex items-center gap-1.5">
+                                    <i class="fa-brands fa-linkedin text-teal-400"></i>
+                                    <span id="pvLinkedin" class="empty-placeholder">LinkedIn</span>
+                                </span>
                             </div>
                         </div>
                     </div>
 
                     <!-- ABOUT ME -->
-                    <div id="secAbout" class="mb-5">
-                        <h2 class="pdf-section-title">ABOUT ME</h2>
-                        <p id="pvAbout" class="text-[11px] text-slate-700 leading-relaxed text-justify empty-placeholder">
-                            Your about me description will appear here...
-                        </p>
+                    <div id="secAbout" class="print-break-avoid">
+                        <h2 class="pdf-section-title"><i class="fa-solid fa-user text-teal-700 text-xs"></i> ABOUT ME</h2>
+                        <div class="bg-slate-50 p-3 rounded border-l-2 border-teal-600 text-[11px] text-slate-700 leading-relaxed text-justify">
+                            <p id="pvAbout" class="empty-placeholder">
+                                Your about me description will appear here...
+                            </p>
+                        </div>
                     </div>
 
-                    <!-- PERSONAL DETAILS -->
-                    <div id="secPersonal" class="mb-5">
-                        <h2 class="pdf-section-title">PERSONAL DETAILS</h2>
-                        <div class="grid grid-cols-2 gap-x-8 gap-y-1.5 text-[11px]">
-                            <div class="flex justify-between border-b border-slate-100 pb-0.5">
-                                <span class="font-bold text-slate-800">FATHER'S NAME</span>
-                                <span id="pvFather" class="text-slate-700 empty-placeholder">-</span>
-                            </div>
-                            <div class="flex justify-between border-b border-slate-100 pb-0.5">
-                                <span class="font-bold text-slate-800">MOTHER'S NAME</span>
-                                <span id="pvMother" class="text-slate-700 empty-placeholder">-</span>
-                            </div>
-                            <div class="flex justify-between border-b border-slate-100 pb-0.5">
-                                <span class="font-bold text-slate-800">DATE OF BIRTH</span>
-                                <span id="pvDOB" class="text-slate-700 empty-placeholder">-</span>
-                            </div>
-                            <div class="flex justify-between border-b border-slate-100 pb-0.5">
-                                <span class="font-bold text-slate-800">GENDER</span>
-                                <span id="pvGender" class="text-slate-700 empty-placeholder">-</span>
-                            </div>
-                            <div class="flex justify-between border-b border-slate-100 pb-0.5">
-                                <span class="font-bold text-slate-800">NATIONALITY</span>
-                                <span id="pvNationality" class="text-slate-700 empty-placeholder">-</span>
-                            </div>
-                            <div class="flex justify-between border-b border-slate-100 pb-0.5">
-                                <span class="font-bold text-slate-800">RELIGION</span>
-                                <span id="pvReligion" class="text-slate-700 empty-placeholder">-</span>
-                            </div>
-                            <div class="flex justify-between border-b border-slate-100 pb-0.5">
-                                <span class="font-bold text-slate-800">MARITAL STATUS</span>
-                                <span id="pvMarital" class="text-slate-700 empty-placeholder">-</span>
-                            </div>
-                            <div class="flex justify-between border-b border-slate-100 pb-0.5">
-                                <span class="font-bold text-slate-800">BLOOD GROUP</span>
-                                <span id="pvBlood" class="text-slate-700 empty-placeholder">-</span>
-                            </div>
-                            <div class="flex justify-between border-b border-slate-100 pb-0.5">
-                                <span class="font-bold text-slate-800">NID NO.</span>
-                                <span id="pvNid" >-</span>
-                            </div>
-                        </div>
-
-                        <div class="grid grid-cols-1 gap-1.5 text-[11px] mt-2">
-                            <div>
-                                <span class="font-bold text-slate-800 uppercase block text-[10px]">CURRENT ADDRESS</span>
-                                <span id="pvCurrAddr" class="text-slate-700 empty-placeholder">-</span>
-                            </div>
-                            <div>
-                                <span class="font-bold text-slate-800 uppercase block text-[10px]">PERMANENT ADDRESS</span>
-                                <span id="pvPermAddr" class="text-slate-700 empty-placeholder">-</span>
-                            </div>
+                    <!-- DYNAMIC PERSONAL DETAILS PREVIEW -->
+                    <div id="secPersonal" class="print-break-avoid">
+                        <h2 class="pdf-section-title"><i class="fa-solid fa-id-card text-teal-700 text-xs"></i> PERSONAL DETAILS</h2>
+                        <div id="pvPersonalContainer" class="grid grid-cols-2 gap-2 text-[11px]">
+                            <p class="empty-placeholder text-xs col-span-2">No personal details added yet.</p>
                         </div>
                     </div>
 
                     <!-- DYNAMIC EDUCATION PREVIEW -->
-                    <div id="pvEduSection" class="mb-5">
-                        <h2 class="pdf-section-title">EDUCATION</h2>
-                        <div id="pvEduContainer" class="space-y-3 text-[11px]">
+                    <div id="pvEduSection" class="print-break-avoid">
+                        <h2 class="pdf-section-title"><i class="fa-solid fa-graduation-cap text-teal-700 text-xs"></i> EDUCATION</h2>
+                        <div id="pvEduContainer" class="space-y-2.5 text-[11px]">
                             <p class="empty-placeholder text-xs">No education details added yet.</p>
                         </div>
                     </div>
-                    <!-- TECHNICAL SKILLS -->
-                    <div id="secSkills" class="mb-5">
-                        <h2 class="pdf-section-title">TECHNICAL SKILLS</h2>
-                        <div class="space-y-2 text-[11px]">
-                            <div>
-                                <span class="font-bold text-slate-800 block text-[10.5px]">Computer Skills</span>
-                                <p id="pvCompSkills" class="text-slate-700 empty-placeholder">-</p>
-                            </div>
-                            <div>
-                                <span class="font-bold text-slate-800 block text-[10.5px]">Engineering Software</span>
-                                <p id="pvEngSoftware" class="text-slate-700 empty-placeholder">-</p>
-                            </div>
-                            <div>
-                                <span class="font-bold text-slate-800 block text-[10.5px]">Programming</span>
-                                <p id="pvProg" class="text-slate-700 empty-placeholder">-</p>
-                            </div>
-                            <div>
-                                <span class="font-bold text-slate-800 block text-[10.5px]">Soft Skills</span>
-                                <p id="pvSoftSkills" class="text-slate-700 empty-placeholder">-</p>
-                            </div>
+
+                    <!-- DYNAMIC TECHNICAL SKILLS PREVIEW -->
+                    <div id="secSkills" class="print-break-avoid">
+                        <h2 class="pdf-section-title"><i class="fa-solid fa-gears text-teal-700 text-xs"></i> TECHNICAL & SOFT SKILLS</h2>
+                        <div id="pvSkillsContainer" class="grid grid-cols-1 md:grid-cols-2 gap-2 text-[11px]">
+                            <p class="empty-placeholder text-xs col-span-2">No technical skills added yet.</p>
                         </div>
                     </div>
 
-                    <!-- LANGUAGES -->
-                    <div id="secLang" class="mb-5">
-                        <h2 class="pdf-section-title">LANGUAGES</h2>
-                        <div class="grid grid-cols-2 gap-4 text-[11px]">
-                            <div class="flex justify-between border-b border-slate-100 pb-0.5">
-                                <span class="font-medium text-slate-800">Bangla</span>
-                                <span id="pvLangBangla" class="text-slate-600 font-semibold empty-placeholder">-</span>
-                            </div>
-                            <div class="flex justify-between border-b border-slate-100 pb-0.5">
-                                <span class="font-medium text-slate-800">English</span>
-                                <span id="pvLangEnglish" class="text-slate-600 font-semibold empty-placeholder">-</span>
-                            </div>
+                    <!-- DYNAMIC LANGUAGES PREVIEW -->
+                    <div id="secLang" class="print-break-avoid">
+                        <h2 class="pdf-section-title"><i class="fa-solid fa-language text-teal-700 text-xs"></i> LANGUAGES</h2>
+                        <div id="pvLangContainer" class="grid grid-cols-2 gap-2 text-[11px]">
+                            <p class="empty-placeholder text-xs col-span-2">No languages added yet.</p>
                         </div>
                     </div>
-
-
 
                     <!-- DYNAMIC TRAINING PREVIEW -->
-                    <div id="pvTrainingSection" class="mb-5">
-                        <h2 class="pdf-section-title">PROFESSIONAL TRAINING & CERTIFICATIONS</h2>
-                        <div id="pvTrainingContainer" class="space-y-3 text-[11px]">
+                    <div id="pvTrainingSection" class="print-break-avoid">
+                        <h2 class="pdf-section-title"><i class="fa-solid fa-award text-teal-700 text-xs"></i> PROFESSIONAL TRAINING & CERTIFICATIONS</h2>
+                        <div id="pvTrainingContainer" class="space-y-2 text-[11px]">
                             <p class="empty-placeholder text-xs">No training/workshop details added yet.</p>
                         </div>
                     </div>
 
                     <!-- DYNAMIC REFERENCES PREVIEW -->
-                    <div id="pvRefSection" class="mb-4">
-                        <h2 class="pdf-section-title">REFERENCES</h2>
-                        <div id="pvRefContainer" class="grid grid-cols-2 gap-6 text-[11px]">
+                    <div id="pvRefSection" class="print-break-avoid">
+                        <h2 class="pdf-section-title"><i class="fa-solid fa-users text-teal-700 text-xs"></i> REFERENCES</h2>
+                        <div id="pvRefContainer" class="grid grid-cols-2 gap-3 text-[11px]">
                             <p class="empty-placeholder text-xs col-span-2">No reference details added yet.</p>
                         </div>
                     </div>
@@ -442,9 +343,21 @@
 
     </main>
 
+    <!-- Bottom Golden & Black Footer (Center Aligned, Hidden on Print) -->
+    <footer class="no-print mt-auto bg-gradient-to-r from-black via-zinc-950 to-black border-t border-amber-500/30 py-4 px-6 text-center shadow-2xl">
+        <div class="flex flex-col items-center justify-center max-w-7xl mx-auto gap-1 text-center">
+            <div class="flex items-center justify-center gap-2">
+                <span class="text-xs text-slate-400 font-light"></span>
+                <i class="fa-solid fa-gem text-amber-400 text-xs"></i>
+                <span class="gold-gradient-text font-black text-sm tracking-widest uppercase">DEVELOPED BY RIMIT</span>
+            </div>
+            <p class="text-[11px] text-slate-500">Interactive Resume & Printable PDF Builder Studio</p>
+        </div>
+    </footer>
+
     <!-- JavaScript Functions -->
     <script>
-        // Update Static Text Fields
+        // Static Header Update
         function updateCV() {
             const name = document.getElementById('inputName').value.trim();
             const title = document.getElementById('inputTitle').value.trim();
@@ -458,27 +371,6 @@
             updateField('pvPhone', phone, 'Phone Number');
             updateField('pvEmail', email, 'Email Address');
             updateField('pvLinkedin', linkedin, 'LinkedIn Profile');
-
-            updateField('pvFather', document.getElementById('inputFather').value.trim());
-            updateField('pvMother', document.getElementById('inputMother').value.trim());
-            updateField('pvDOB', document.getElementById('inputDOB').value.trim());
-            updateField('pvGender', document.getElementById('inputGender').value.trim());
-            updateField('pvNationality', document.getElementById('inputNationality').value.trim());
-            updateField('pvReligion', document.getElementById('inputReligion').value.trim());
-            updateField('pvMarital', document.getElementById('inputMarital').value.trim());
-            updateField('pvBlood', document.getElementById('inputBlood').value.trim());
-            updateField('pvNid', document.getElementById('inputNid').value.trim());
-
-            updateField('pvCurrAddr', document.getElementById('inputCurrAddr').value.trim());
-            updateField('pvPermAddr', document.getElementById('inputPermAddr').value.trim());
-
-            updateField('pvCompSkills', document.getElementById('inputCompSkills').value.trim());
-            updateField('pvEngSoftware', document.getElementById('inputEngSoftware').value.trim());
-            updateField('pvProg', document.getElementById('inputProg').value.trim());
-            updateField('pvSoftSkills', document.getElementById('inputSoftSkills').value.trim());
-
-            updateField('pvLangBangla', document.getElementById('inputLangBangla').value.trim());
-            updateField('pvLangEnglish', document.getElementById('inputLangEnglish').value.trim());
 
             updateField('pvAbout', document.getElementById('inputAbout').value.trim(), 'Your about me description will appear here...');
         }
@@ -510,12 +402,165 @@
             }
         }
 
-        // Dynamic Dynamic Lists State
+        // Global Arrays for Dynamic Sections
+        let personalDetails = [];
+        let skills = [];
+        let languages = [];
         let educations = [];
         let trainings = [];
         let references = [];
 
-        // Education Handling
+        // --- 1. DYNAMIC PERSONAL DETAILS HANDLING ---
+        function addPersonalDetail(data = { label: '', value: '' }) {
+            const id = Date.now() + Math.random();
+            personalDetails.push({ id, ...data });
+            renderPersonalForm();
+            renderPersonalCV();
+        }
+
+        function removePersonalDetail(id) {
+            personalDetails = personalDetails.filter(p => p.id !== id);
+            renderPersonalForm();
+            renderPersonalCV();
+        }
+
+        function renderPersonalForm() {
+            const container = document.getElementById('personalList');
+            container.innerHTML = '';
+            personalDetails.forEach((pd, idx) => {
+                container.innerHTML += `
+                    <div class="bg-slate-900 p-2 rounded border border-slate-700 text-xs flex gap-1.5 items-center relative">
+                        <input type="text" placeholder="বিষয়ের নাম (যেমন: পিতার নাম)" value="${pd.label}" oninput="personalDetails[${idx}].label = this.value; renderPersonalCV();" class="w-2/5 p-1 bg-slate-950 border border-slate-800 rounded text-slate-100 font-semibold uppercase text-[11px]">
+                        <input type="text" placeholder="তথ্যের বিবরণ লিখুন" value="${pd.value}" oninput="personalDetails[${idx}].value = this.value; renderPersonalCV();" class="w-3/5 p-1 bg-slate-950 border border-slate-800 rounded text-slate-100">
+                        <button onclick="removePersonalDetail(${pd.id})" class="text-rose-400 hover:text-rose-600 px-1"><i class="fa-solid fa-xmark"></i></button>
+                    </div>
+                `;
+            });
+        }
+
+        function renderPersonalCV() {
+            const container = document.getElementById('pvPersonalContainer');
+            if (personalDetails.length === 0) {
+                container.innerHTML = '<p class="empty-placeholder text-xs col-span-2">No personal details added yet.</p>';
+                return;
+            }
+            container.innerHTML = '';
+            personalDetails.forEach(pd => {
+                const label = pd.label.trim() || 'Detail Label';
+                const value = pd.value.trim() || '-';
+                const isAddress = label.toLowerCase().includes('address') || label.includes('ঠিকানা');
+
+                if (isAddress) {
+                    container.innerHTML += `
+                        <div class="pdf-card-item col-span-2 bg-slate-50 p-2 rounded border border-slate-200">
+                            <span class="font-bold text-teal-800 uppercase block text-[9.5px] tracking-wide">${label}</span>
+                            <span class="text-slate-700 font-medium text-[10.5px]">${value}</span>
+                        </div>
+                    `;
+                } else {
+                    container.innerHTML += `
+                        <div class="pdf-card-item bg-slate-50 p-2 rounded border border-slate-200 flex justify-between items-center">
+                            <span class="font-bold text-teal-800 uppercase text-[9.5px] tracking-wider">${label}</span>
+                            <span class="text-slate-700 font-semibold text-[10.5px]">${value}</span>
+                        </div>
+                    `;
+                }
+            });
+        }
+
+        // --- 2. DYNAMIC SKILLS HANDLING ---
+        function addSkill(data = { label: '', value: '' }) {
+            const id = Date.now() + Math.random();
+            skills.push({ id, ...data });
+            renderSkillForm();
+            renderSkillCV();
+        }
+
+        function removeSkill(id) {
+            skills = skills.filter(s => s.id !== id);
+            renderSkillForm();
+            renderSkillCV();
+        }
+
+        function renderSkillForm() {
+            const container = document.getElementById('skillList');
+            container.innerHTML = '';
+            skills.forEach((sk, idx) => {
+                container.innerHTML += `
+                    <div class="bg-slate-900 p-2 rounded border border-slate-700 text-xs space-y-1.5 relative">
+                        <div class="flex justify-between items-center">
+                            <input type="text" placeholder="দক্ষতার ক্যাটাগরি (যেমন: Programming)" value="${sk.label}" oninput="skills[${idx}].label = this.value; renderSkillCV();" class="w-full p-1 bg-slate-950 border border-slate-800 rounded text-teal-400 font-semibold text-xs">
+                            <button onclick="removeSkill(${sk.id})" class="text-rose-400 hover:text-rose-600 ml-2"><i class="fa-solid fa-xmark"></i></button>
+                        </div>
+                        <input type="text" placeholder="দক্ষতার বিবরণ (যেমন: Python, C++, MATLAB)" value="${sk.value}" oninput="skills[${idx}].value = this.value; renderSkillCV();" class="w-full p-1 bg-slate-950 border border-slate-800 rounded text-slate-100">
+                    </div>
+                `;
+            });
+        }
+
+        function renderSkillCV() {
+            const container = document.getElementById('pvSkillsContainer');
+            if (skills.length === 0) {
+                container.innerHTML = '<p class="empty-placeholder text-xs col-span-2">No technical skills added yet.</p>';
+                return;
+            }
+            container.innerHTML = '';
+            skills.forEach(sk => {
+                container.innerHTML += `
+                    <div class="pdf-card-item bg-slate-50 p-2.5 rounded border border-slate-200 border-l-2 border-l-teal-600 shadow-sm">
+                        <span class="font-bold text-slate-900 uppercase block text-[10px] text-teal-800 tracking-wider mb-0.5">${sk.label || 'Skill Category'}</span>
+                        <p class="text-slate-700 font-medium text-[10.5px]">${sk.value || '-'}</p>
+                    </div>
+                `;
+            });
+        }
+
+        // --- 3. DYNAMIC LANGUAGES HANDLING ---
+        function addLanguage(data = { name: '', level: '' }) {
+            const id = Date.now() + Math.random();
+            languages.push({ id, ...data });
+            renderLangForm();
+            renderLangCV();
+        }
+
+        function removeLanguage(id) {
+            languages = languages.filter(l => l.id !== id);
+            renderLangForm();
+            renderLangCV();
+        }
+
+        function renderLangForm() {
+            const container = document.getElementById('langList');
+            container.innerHTML = '';
+            languages.forEach((lg, idx) => {
+                container.innerHTML += `
+                    <div class="bg-slate-900 p-2 rounded border border-slate-700 text-xs flex gap-1.5 items-center relative">
+                        <input type="text" placeholder="ভাষা (যেমন: বাংলা)" value="${lg.name}" oninput="languages[${idx}].name = this.value; renderLangCV();" class="w-1/2 p-1 bg-slate-950 border border-slate-800 rounded text-slate-100 font-medium">
+                        <input type="text" placeholder="দক্ষতা (যেমন: মাতৃভাষা / Fluent)" value="${lg.level}" oninput="languages[${idx}].level = this.value; renderLangCV();" class="w-1/2 p-1 bg-slate-950 border border-slate-800 rounded text-slate-100">
+                        <button onclick="removeLanguage(${lg.id})" class="text-rose-400 hover:text-rose-600 px-1"><i class="fa-solid fa-xmark"></i></button>
+                    </div>
+                `;
+            });
+        }
+
+        function renderLangCV() {
+            const container = document.getElementById('pvLangContainer');
+            if (languages.length === 0) {
+                container.innerHTML = '<p class="empty-placeholder text-xs col-span-2">No languages added yet.</p>';
+                return;
+            }
+            container.innerHTML = '';
+            languages.forEach(lg => {
+                container.innerHTML += `
+                    <div class="pdf-card-item bg-slate-50 p-2 rounded border border-slate-200 flex justify-between items-center">
+                        <span class="font-bold text-slate-800">${lg.name || 'Language'}</span>
+                        <span class="bg-teal-100 text-teal-800 text-[9.5px] px-2 py-0.5 rounded font-semibold">${lg.level || '-'}</span>
+                    </div>
+                `;
+            });
+        }
+
+        // --- 4. EDUCATION HANDLING ---
         function addEducation(data = { degree: '', institute: '', duration: '', result: '', note: '' }) {
             const id = Date.now() + Math.random();
             educations.push({ id, ...data });
@@ -534,15 +579,15 @@
             container.innerHTML = '';
             educations.forEach((edu, idx) => {
                 container.innerHTML += `
-                    <div class="bg-white p-2.5 rounded border border-slate-200 text-xs space-y-1.5 relative">
-                        <button onclick="removeEducation(${edu.id})" class="absolute top-2 right-2 text-rose-500 hover:text-rose-700"><i class="fa-solid fa-xmark"></i></button>
-                        <input type="text" placeholder="Degree (e.g. B.Sc. in EEE)" value="${edu.degree}" oninput="educations[${idx}].degree = this.value; renderEduCV();" class="w-full p-1 border rounded">
-                        <input type="text" placeholder="Institute / College" value="${edu.institute}" oninput="educations[${idx}].institute = this.value; renderEduCV();" class="w-full p-1 border rounded">
+                    <div class="bg-slate-900 p-2.5 rounded border border-slate-700 text-xs space-y-1.5 relative">
+                        <button onclick="removeEducation(${edu.id})" class="absolute top-2 right-2 text-rose-400 hover:text-rose-600"><i class="fa-solid fa-xmark"></i></button>
+                        <input type="text" placeholder="ডিগ্রির নাম (যেমন: B.Sc. in EEE)" value="${edu.degree}" oninput="educations[${idx}].degree = this.value; renderEduCV();" class="w-full p-1 bg-slate-950 border border-slate-800 rounded text-slate-100">
+                        <input type="text" placeholder="প্রতিষ্ঠান / কলেজের নাম" value="${edu.institute}" oninput="educations[${idx}].institute = this.value; renderEduCV();" class="w-full p-1 bg-slate-950 border border-slate-800 rounded text-slate-100">
                         <div class="grid grid-cols-2 gap-1.5">
-                            <input type="text" placeholder="Duration (e.g. 2020-2025)" value="${edu.duration}" oninput="educations[${idx}].duration = this.value; renderEduCV();" class="p-1 border rounded">
-                            <input type="text" placeholder="CGPA / GPA" value="${edu.result}" oninput="educations[${idx}].result = this.value; renderEduCV();" class="p-1 border rounded">
+                            <input type="text" placeholder="সময়কাল (যেমন: 2020-2024)" value="${edu.duration}" oninput="educations[${idx}].duration = this.value; renderEduCV();" class="p-1 bg-slate-950 border border-slate-800 rounded text-slate-100">
+                            <input type="text" placeholder="ফলাফল / CGPA" value="${edu.result}" oninput="educations[${idx}].result = this.value; renderEduCV();" class="p-1 bg-slate-950 border border-slate-800 rounded text-slate-100">
                         </div>
-                        <input type="text" placeholder="Affiliation or Additional Note (Optional)" value="${edu.note}" oninput="educations[${idx}].note = this.value; renderEduCV();" class="w-full p-1 border rounded">
+                        <input type="text" placeholder="অতিরিক্ত তথ্য (ঐচ্ছিক)" value="${edu.note}" oninput="educations[${idx}].note = this.value; renderEduCV();" class="w-full p-1 bg-slate-950 border border-slate-800 rounded text-slate-100">
                     </div>
                 `;
             });
@@ -557,20 +602,20 @@
             container.innerHTML = '';
             educations.forEach(edu => {
                 container.innerHTML += `
-                    <div>
-                        <div class="flex justify-between items-baseline font-bold text-slate-900">
-                            <span>${edu.degree || 'Degree Title'}</span>
-                            <span class="text-[10px] text-slate-600 font-normal">${edu.duration || ''}</span>
+                    <div class="pdf-card-item bg-slate-50 p-3 rounded border-l-4 border-teal-600 border-y border-r border-slate-200 shadow-sm space-y-1">
+                        <div class="flex justify-between items-start">
+                            <h3 class="font-bold text-slate-900 text-[11.5px] uppercase">${edu.degree || 'Degree Title'}</h3>
+                            ${edu.duration ? `<span class="bg-teal-700 text-white text-[9px] px-2 py-0.5 rounded font-semibold">${edu.duration}</span>` : ''}
                         </div>
-                        <p class="text-slate-700 font-medium">${edu.institute || 'Institute Name'}</p>
+                        <p class="text-teal-800 font-medium text-[11px]"><i class="fa-solid fa-building-columns text-[10px] mr-1"></i> ${edu.institute || 'Institute Name'}</p>
                         ${edu.note ? `<p class="text-[10px] text-slate-500 italic">${edu.note}</p>` : ''}
-                        ${edu.result ? `<p class="text-[10.5px] font-bold text-slate-800 mt-0.5">${edu.result}</p>` : ''}
+                        ${edu.result ? `<div class="pt-0.5"><span class="inline-block bg-slate-200 text-slate-800 text-[9.5px] font-bold px-2 py-0.5 rounded">${edu.result}</span></div>` : ''}
                     </div>
                 `;
             });
         }
 
-        // Training Handling
+        // --- 5. TRAINING HANDLING ---
         function addTraining(data = { title: '', category: 'INDUSTRIAL TRAINING', institute: '', duration: '', desc: '' }) {
             const id = Date.now() + Math.random();
             trainings.push({ id, ...data });
@@ -589,15 +634,15 @@
             container.innerHTML = '';
             trainings.forEach((tr, idx) => {
                 container.innerHTML += `
-                    <div class="bg-white p-2.5 rounded border border-slate-200 text-xs space-y-1.5 relative">
-                        <button onclick="removeTraining(${tr.id})" class="absolute top-2 right-2 text-rose-500 hover:text-rose-700"><i class="fa-solid fa-xmark"></i></button>
-                        <input type="text" placeholder="Category (e.g. INDUSTRIAL TRAINING / WORKSHOP)" value="${tr.category}" oninput="trainings[${idx}].category = this.value; renderTrainingCV();" class="w-full p-1 border rounded font-semibold text-teal-800">
-                        <input type="text" placeholder="Course / Topic Title" value="${tr.title}" oninput="trainings[${idx}].title = this.value; renderTrainingCV();" class="w-full p-1 border rounded">
+                    <div class="bg-slate-900 p-2.5 rounded border border-slate-700 text-xs space-y-1.5 relative">
+                        <button onclick="removeTraining(${tr.id})" class="absolute top-2 right-2 text-rose-400 hover:text-rose-600"><i class="fa-solid fa-xmark"></i></button>
+                        <input type="text" placeholder="ক্যাটাগরি (যেমন: INDUSTRIAL TRAINING)" value="${tr.category}" oninput="trainings[${idx}].category = this.value; renderTrainingCV();" class="w-full p-1 bg-slate-950 border border-slate-800 rounded font-semibold text-teal-400">
+                        <input type="text" placeholder="ট্রেনিং বা কোর্সের শিরোনাম" value="${tr.title}" oninput="trainings[${idx}].title = this.value; renderTrainingCV();" class="w-full p-1 bg-slate-950 border border-slate-800 rounded text-slate-100">
                         <div class="grid grid-cols-2 gap-1.5">
-                            <input type="text" placeholder="Institute / Organization" value="${tr.institute}" oninput="trainings[${idx}].institute = this.value; renderTrainingCV();" class="p-1 border rounded">
-                            <input type="text" placeholder="Date / Duration" value="${tr.duration}" oninput="trainings[${idx}].duration = this.value; renderTrainingCV();" class="p-1 border rounded">
+                            <input type="text" placeholder="প্রতিষ্ঠানের নাম" value="${tr.institute}" oninput="trainings[${idx}].institute = this.value; renderTrainingCV();" class="p-1 bg-slate-950 border border-slate-800 rounded text-slate-100">
+                            <input type="text" placeholder="সময়কাল / তারিখ" value="${tr.duration}" oninput="trainings[${idx}].duration = this.value; renderTrainingCV();" class="p-1 bg-slate-950 border border-slate-800 rounded text-slate-100">
                         </div>
-                        <textarea placeholder="Description / What you learned" oninput="trainings[${idx}].desc = this.value; renderTrainingCV();" class="w-full p-1 border rounded" rows="2">${tr.desc}</textarea>
+                        <textarea placeholder="প্রশিক্ষণের সংক্ষেপে বিবরণ লিখুন..." oninput="trainings[${idx}].desc = this.value; renderTrainingCV();" class="w-full p-1 bg-slate-950 border border-slate-800 rounded text-slate-100" rows="2">${tr.desc}</textarea>
                     </div>
                 `;
             });
@@ -612,20 +657,20 @@
             container.innerHTML = '';
             trainings.forEach(tr => {
                 container.innerHTML += `
-                    <div>
-                        ${tr.category ? `<h3 class="pdf-sub-title">${tr.category}</h3>` : ''}
-                        <div class="flex justify-between items-baseline font-bold text-slate-900">
-                            <span>${tr.title || 'Training Title'}</span>
-                            <span class="text-[10px] text-slate-600 font-normal">${tr.duration || ''}</span>
+                    <div class="pdf-card-item bg-slate-50 p-2.5 rounded border border-slate-200 border-l-2 border-l-teal-600 space-y-1">
+                        <div class="flex justify-between items-center">
+                            ${tr.category ? `<span class="bg-teal-100 text-teal-800 font-extrabold uppercase text-[9px] px-2 py-0.5 rounded tracking-wide">${tr.category}</span>` : ''}
+                            <span class="text-[9.5px] text-slate-500 font-semibold">${tr.duration || ''}</span>
                         </div>
-                        <p class="text-slate-700 font-medium italic mb-1">${tr.institute || ''}</p>
-                        <p class="text-slate-700 leading-relaxed text-justify">${tr.desc || ''}</p>
+                        <h4 class="font-bold text-slate-900 text-[11px]">${tr.title || 'Training Title'}</h4>
+                        <p class="text-teal-800 text-[10px] font-medium italic">${tr.institute || ''}</p>
+                        ${tr.desc ? `<p class="text-slate-700 text-[10.5px] leading-relaxed text-justify pt-0.5">${tr.desc}</p>` : ''}
                     </div>
                 `;
             });
         }
 
-        // Reference Handling
+        // --- 6. REFERENCE HANDLING ---
         function addReference(data = { name: '', title: '', dept: '', org: '', phone: '', email: '' }) {
             const id = Date.now() + Math.random();
             references.push({ id, ...data });
@@ -644,15 +689,15 @@
             container.innerHTML = '';
             references.forEach((ref, idx) => {
                 container.innerHTML += `
-                    <div class="bg-white p-2.5 rounded border border-slate-200 text-xs space-y-1.5 relative">
-                        <button onclick="removeReference(${ref.id})" class="absolute top-2 right-2 text-rose-500 hover:text-rose-700"><i class="fa-solid fa-xmark"></i></button>
-                        <input type="text" placeholder="Name" value="${ref.name}" oninput="references[${idx}].name = this.value; renderRefCV();" class="w-full p-1 border rounded font-semibold">
-                        <input type="text" placeholder="Designation / Title" value="${ref.title}" oninput="references[${idx}].title = this.value; renderRefCV();" class="w-full p-1 border rounded">
-                        <input type="text" placeholder="Department" value="${ref.dept}" oninput="references[${idx}].dept = this.value; renderRefCV();" class="w-full p-1 border rounded">
-                        <input type="text" placeholder="Organization / College" value="${ref.org}" oninput="references[${idx}].org = this.value; renderRefCV();" class="w-full p-1 border rounded">
+                    <div class="bg-slate-900 p-2.5 rounded border border-slate-700 text-xs space-y-1.5 relative">
+                        <button onclick="removeReference(${ref.id})" class="absolute top-2 right-2 text-rose-400 hover:text-rose-600"><i class="fa-solid fa-xmark"></i></button>
+                        <input type="text" placeholder="রেফারেন্সের ব্যক্তির নাম" value="${ref.name}" oninput="references[${idx}].name = this.value; renderRefCV();" class="w-full p-1 bg-slate-950 border border-slate-800 rounded font-semibold text-slate-100">
+                        <input type="text" placeholder="পদবী" value="${ref.title}" oninput="references[${idx}].title = this.value; renderRefCV();" class="w-full p-1 bg-slate-950 border border-slate-800 rounded text-slate-100">
+                        <input type="text" placeholder="ডিপার্টমেন্ট" value="${ref.dept}" oninput="references[${idx}].dept = this.value; renderRefCV();" class="w-full p-1 bg-slate-950 border border-slate-800 rounded text-slate-100">
+                        <input type="text" placeholder="প্রতিষ্ঠান / সংগঠন" value="${ref.org}" oninput="references[${idx}].org = this.value; renderRefCV();" class="w-full p-1 bg-slate-950 border border-slate-800 rounded text-slate-100">
                         <div class="grid grid-cols-2 gap-1.5">
-                            <input type="text" placeholder="Phone" value="${ref.phone}" oninput="references[${idx}].phone = this.value; renderRefCV();" class="p-1 border rounded">
-                            <input type="text" placeholder="Email" value="${ref.email}" oninput="references[${idx}].email = this.value; renderRefCV();" class="p-1 border rounded">
+                            <input type="text" placeholder="ফোন নম্বর" value="${ref.phone}" oninput="references[${idx}].phone = this.value; renderRefCV();" class="p-1 bg-slate-950 border border-slate-800 rounded text-slate-100">
+                            <input type="text" placeholder="ইমেইল" value="${ref.email}" oninput="references[${idx}].email = this.value; renderRefCV();" class="p-1 bg-slate-950 border border-slate-800 rounded text-slate-100">
                         </div>
                     </div>
                 `;
@@ -668,43 +713,21 @@
             container.innerHTML = '';
             references.forEach(ref => {
                 container.innerHTML += `
-                    <div class="space-y-0.5">
-                        <p class="font-bold text-slate-900 text-[11.5px]">${ref.name || 'Reference Name'}</p>
-                        <p class="text-slate-700 font-medium">${ref.title || ''}</p>
-                        <p class="text-slate-600">${ref.dept || ''}</p>
-                        <p class="text-slate-600">${ref.org || ''}</p>
-                        ${ref.phone ? `<p class="text-slate-800 font-medium pt-0.5"><i class="fa-solid fa-phone text-[9px] text-teal-700"></i> ${ref.phone}</p>` : ''}
-                        ${ref.email ? `<p class="text-slate-800 font-medium"><i class="fa-solid fa-envelope text-[9px] text-teal-700"></i> ${ref.email}</p>` : ''}
+                    <div class="pdf-card-item bg-slate-50 p-2.5 rounded border border-slate-200 border-t-2 border-t-teal-600 space-y-0.5">
+                        <p class="font-bold text-slate-900 text-[11px]">${ref.name || 'Reference Name'}</p>
+                        <p class="text-teal-800 font-medium text-[10px]">${ref.title || ''}</p>
+                        <p class="text-slate-600 text-[10px]">${ref.dept || ''}</p>
+                        <p class="text-slate-600 text-[10px] font-semibold">${ref.org || ''}</p>
+                        <div class="pt-1 text-[9.5px] space-y-0.5">
+                            ${ref.phone ? `<p class="text-slate-800 font-medium"><i class="fa-solid fa-phone text-teal-700 mr-1"></i> ${ref.phone}</p>` : ''}
+                            ${ref.email ? `<p class="text-slate-800 font-medium"><i class="fa-solid fa-envelope text-teal-700 mr-1"></i> ${ref.email}</p>` : ''}
+                        </div>
                     </div>
                 `;
             });
         }
 
-        // Clear All Data to Make Form Fully Blank
-        function clearAllData() {
-            document.querySelectorAll('input[type="text"], textarea').forEach(el => el.value = '');
-            document.getElementById('imageUploader').value = '';
-            
-            const pvPhoto = document.getElementById('pvPhoto');
-            pvPhoto.src = '';
-            pvPhoto.classList.add('hidden');
-            document.getElementById('pvPhotoPlaceholder').classList.remove('hidden');
-
-            educations = [];
-            trainings = [];
-            references = [];
-
-            renderEduForm();
-            renderEduCV();
-            renderTrainingForm();
-            renderTrainingCV();
-            renderRefForm();
-            renderRefCV();
-
-            updateCV();
-        }
-
-        // Load Sample PDF Data
+        // --- LOAD ORIGINAL SAMPLE DATA FUNCTION ---
         function loadSampleData() {
             document.getElementById('inputName').value = "AMIT PODDER";
             document.getElementById('inputTitle').value = "ELECTRICAL & ELECTRONIC ENGINEERING GRADUATE";
@@ -714,34 +737,41 @@
 
             document.getElementById('inputAbout').value = "Enthusiastic and hardworking fresher, eager to apply academic knowledge in real-world settings. Known for being responsible, a quick learner, and able to manage tasks effectively. Looking for opportunities to grow professionally and contribute to a productive team. Ready to begin a career with honesty, discipline, and continuous learning.";
 
-            document.getElementById('inputFather').value = "Hara Krishna Podder";
-            document.getElementById('inputMother').value = "Rani Podder";
-            document.getElementById('inputDOB').value = "1st January, 2003";
-            document.getElementById('inputGender').value = "Male";
-            document.getElementById('inputNationality').value = "Bangladeshi";
-            document.getElementById('inputReligion').value = "Hinduism";
-            document.getElementById('inputMarital').value = "Unmarried";
-            document.getElementById('inputBlood').value = "O+";
-            document.getElementById('inputNid').value = "6915220682";
-            document.getElementById('inputCurrAddr').value = "2/2 Mokorba Road, Nogor Khanpur, Narayanganj Sadar, Narayanganj.";
-            document.getElementById('inputPermAddr').value = "Podder Bari, Suricho, Barura, Cumilla.";
+            personalDetails = [
+                { id: 1, label: "FATHER'S NAME", value: "Hara Krishna Podder" },
+                { id: 2, label: "MOTHER'S NAME", value: "Rani Podder" },
+                { id: 3, label: "DATE OF BIRTH", value: "1st January, 2003" },
+                { id: 4, label: "GENDER", value: "Male" },
+                { id: 5, label: "NATIONALITY", value: "Bangladeshi" },
+                { id: 6, label: "RELIGION", value: "Hinduism" },
+                { id: 7, label: "MARITAL STATUS", value: "Unmarried" },
+                { id: 8, label: "BLOOD GROUP", value: "O+" },
+                { id: 9, label: "NID NO.", value: "6915220682" },
+                { id: 10, label: "CURRENT ADDRESS", value: "2/2 Mokorba Road, Nogor Khanpur, Narayanganj Sadar, Narayanganj." },
+                { id: 11, label: "PERMANENT ADDRESS", value: "Podder Bari, Suricho, Barura, Cumilla." }
+            ];
 
-            document.getElementById('inputCompSkills').value = "MS Word, MS Excel, Data Entry, Documentation";
-            document.getElementById('inputEngSoftware').value = "AutoCAD, LTspice, Proteus, Microwind, DSCH, Tanner EDA, Arduino";
-            document.getElementById('inputProg').value = "MATLAB";
-            document.getElementById('inputSoftSkills').value = "Communication, Problem Solving, Teamwork, Time Management";
+            skills = [
+                { id: 1, label: "Computer Skills", value: "MS Word, MS Excel, Data Entry, Documentation" },
+                { id: 2, label: "Engineering Software", value: "AutoCAD, LTspice, Proteus, Microwind, DSCH, Tanner EDA, Arduino" },
+                { id: 3, label: "Programming", value: "MATLAB" },
+                { id: 4, label: "Soft Skills", value: "Communication, Problem Solving, Teamwork, Time Management" }
+            ];
 
-            document.getElementById('inputLangBangla').value = "Native";
-            document.getElementById('inputLangEnglish').value = "Basic Communication";
+            languages = [
+                { id: 1, name: "Bangla", level: "Native" },
+                { id: 2, name: "English", level: "Basic Communication" }
+            ];
 
             educations = [
-                { degree: "B.Sc. in Electrical and Electronic Engineering (EEE)", institute: "Barishal Engineering College", duration: "Jan 2020 - Oct 2025", result: "CGPA: 3.21 out of 4.00", note: "Affiliated with the Faculty of Engineering and Technology, University of Dhaka" },
-                { degree: "Higher Secondary Certificate (HSC)", institute: "Govt. Tolaram College, Narayanganj", duration: "July 2017 - July 2019", result: "GPA: 4.42 out of 5.00 (Science Group)", note: "" },
-                { degree: "Secondary School Certificate (SSC)", institute: "I.E.T Govt. High School, Narayanganj", duration: "Jan 2012 - May 2017", result: "GPA: 4.95 out of 5.00 (Science Group)", note: "" }
+                { id: 1, degree: "B.Sc. in Electrical and Electronic Engineering (EEE)", institute: "Barishal Engineering College", duration: "Jan 2020 - Oct 2025", result: "CGPA: 3.21 out of 4.00", note: "Affiliated with the Faculty of Engineering and Technology, University of Dhaka" },
+                { id: 2, degree: "Higher Secondary Certificate (HSC)", institute: "Govt. Tolaram College, Narayanganj", duration: "July 2017 - July 2019", result: "GPA: 4.42 out of 5.00 (Science Group)", note: "" },
+                { id: 3, degree: "Secondary School Certificate (SSC)", institute: "I.E.T Govt. High School, Narayanganj", duration: "Jan 2012 - May 2017", result: "GPA: 4.95 out of 5.00 (Science Group)", note: "" }
             ];
 
             trainings = [
                 {
+                    id: 1,
                     category: "INDUSTRIAL TRAINING",
                     title: "Industrial Technology in Electrical Engineering & Instrumentation",
                     institute: "Training Institute for Chemical Industries (TICI), Polash, Narsingdi",
@@ -749,6 +779,7 @@
                     desc: "Gained extensive hands-on experience programming and troubleshooting PLCs and configuring SCADA systems for process monitoring. Analyzed and interpreted complex industrial documentation, including Piping and Instrumentation Diagrams (P&IDs) and electrical ladder logic schematics. Calibrated and deployed various industrial sensors for measuring pressure, flow, and temperature in simulated process environments. Acquired basic knowledge of DCS control, motor starting methods, and industrial safety."
                 },
                 {
+                    id: 2,
                     category: "TECHNICAL WORKSHOP",
                     title: "Microcontrollers to IoT with JRC Board",
                     institute: "FronTech Limited, Mohakhali DOHS",
@@ -759,6 +790,7 @@
 
             references = [
                 {
+                    id: 1,
                     name: "Md. Liton Rabbani",
                     title: "Principal (Additional Charge)",
                     dept: "Associate Professor, Department of Civil Engineering",
@@ -767,6 +799,7 @@
                     email: "liton.duengg@bec.edu.bd"
                 },
                 {
+                    id: 2,
                     name: "Engr. Sabuj Ahmed",
                     title: "Assistant Professor",
                     dept: "Department of EEE",
@@ -776,10 +809,86 @@
                 }
             ];
 
+            renderPersonalForm();
+            renderPersonalCV();
+
+            renderSkillForm();
+            renderSkillCV();
+
+            renderLangForm();
+            renderLangCV();
+
             renderEduForm();
             renderEduCV();
+
             renderTrainingForm();
             renderTrainingCV();
+
+            renderRefForm();
+            renderRefCV();
+
+            updateCV();
+        }
+
+        // --- CLEAR ALL DATA FUNCTION ---
+        function clearAllData() {
+            // Clear inputs
+            document.querySelectorAll('input[type="text"], textarea').forEach(el => el.value = '');
+            document.getElementById('imageUploader').value = '';
+            
+            // Clear photo
+            const pvPhoto = document.getElementById('pvPhoto');
+            pvPhoto.src = '';
+            pvPhoto.classList.add('hidden');
+            document.getElementById('pvPhotoPlaceholder').classList.remove('hidden');
+
+            // Set Clean Default Structure for Dynamic Fields
+            personalDetails = [
+                { id: 1, label: "FATHER'S NAME", value: "" },
+                { id: 2, label: "MOTHER'S NAME", value: "" },
+                { id: 3, label: "DATE OF BIRTH", value: "" },
+                { id: 4, label: "GENDER", value: "" },
+                { id: 5, label: "NATIONALITY", value: "" },
+                { id: 6, label: "RELIGION", value: "" },
+                { id: 7, label: "MARITAL STATUS", value: "" },
+                { id: 8, label: "BLOOD GROUP", value: "" },
+                { id: 9, label: "NID NO.", value: "" },
+                { id: 10, label: "CURRENT ADDRESS", value: "" },
+                { id: 11, label: "PERMANENT ADDRESS", value: "" }
+            ];
+
+            skills = [
+                { id: 1, label: "Computer Skills", value: "" },
+                { id: 2, label: "Engineering Software", value: "" },
+                { id: 3, label: "Programming", value: "" },
+                { id: 4, label: "Soft Skills", value: "" }
+            ];
+
+            languages = [
+                { id: 1, name: "Bangla", level: "" },
+                { id: 2, name: "English", level: "" }
+            ];
+
+            educations = [];
+            trainings = [];
+            references = [];
+
+            // Render form & live CV
+            renderPersonalForm();
+            renderPersonalCV();
+
+            renderSkillForm();
+            renderSkillCV();
+
+            renderLangForm();
+            renderLangCV();
+
+            renderEduForm();
+            renderEduCV();
+
+            renderTrainingForm();
+            renderTrainingCV();
+
             renderRefForm();
             renderRefCV();
 
@@ -793,4 +902,3 @@
     </script>
 </body>
 </html>
-
